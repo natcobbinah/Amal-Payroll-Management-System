@@ -57,7 +57,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public ResponseEntity<?> deleteUserbyId(int userid) {
 		Optional<User> id = userRepository.findById(userid);
-		if(id.isEmpty()) {
+		if (id.isEmpty()) {
 			throw new ResourceNotFoundException("User with id " + userid + " not found");
 		}
 		userRepository.deleteById(userid);
@@ -153,9 +153,9 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public List<User> disableUsers(List<String> employeeids) {
-		for(int i =0; i < employeeids.size(); i++) {
+		for (int i = 0; i < employeeids.size(); i++) {
 			User user = userRepository.findUserByemployeeid(employeeids.get(i));
-			if(user.getEnabled()==true) {
+			if (user.getEnabled() == true) {
 				user.setEnabled(false);
 				userRepository.save(user);
 			}

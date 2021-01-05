@@ -27,12 +27,18 @@ import com.payroll.usermanagement.entities.Role;
 import com.payroll.usermanagement.entities.User;
 import com.payroll.usermanagement.entities.Userdepartment;
 import com.payroll.usermanagement.entities.Userrole;
+import com.payroll.usermanagement.exceptionhandling.ErrorDetail;
 import com.payroll.usermanagement.services.AdminService;
 import com.payroll.usermanagement.services.UserCredentialsandRolesService;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 
 @EnableDiscoveryClient
 @EnableCircuitBreaker
 @RestController
+@Api(value = "Admin and User_Login operations", description = "admin and UserLogin API")
 @CrossOrigin(maxAge = 3600)
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 public class PayrollUserManagementApplication {
@@ -60,6 +66,10 @@ public class PayrollUserManagementApplication {
 	 * RESTFUL SERVICES ENDPOINTS FOR ADMIN
 	 **************************************************/
 	@PostMapping("/admin/user")
+	@ApiOperation(value = "Creates a  new User", notes="The newly created User with Id will be sent in the location "
+			+ "response header ", response = User.class)
+	@ApiResponses(value = {@ApiResponse(code = 201, message="User created successfully",response = User.class),
+						   @ApiResponse(code = 500, message = "Error creating user", response = ErrorDetail.class)})
 	public User addUser(@Valid @RequestBody User user) {
 		User addUser = adminService.addUser(user);
 		return addUser;
@@ -73,6 +83,7 @@ public class PayrollUserManagementApplication {
 	}
 
 	@GetMapping("/admin/user")
+	@ApiOperation(value = "Retrieves all Users", response = User.class, responseContainer ="List")
 	public List<User> getAllUsers() {
 		return adminService.getAllUsers();
 	}
