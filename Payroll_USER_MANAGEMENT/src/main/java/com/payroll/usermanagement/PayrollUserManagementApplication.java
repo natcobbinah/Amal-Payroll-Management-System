@@ -4,11 +4,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,6 +31,7 @@ import com.payroll.usermanagement.services.AdminService;
 import com.payroll.usermanagement.services.UserCredentialsandRolesService;
 
 @EnableDiscoveryClient
+@EnableCircuitBreaker
 @RestController
 @CrossOrigin(maxAge = 3600)
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
@@ -55,14 +60,14 @@ public class PayrollUserManagementApplication {
 	 * RESTFUL SERVICES ENDPOINTS FOR ADMIN
 	 **************************************************/
 	@PostMapping("/admin/user")
-	public User addUser(@RequestBody User user) {
+	public User addUser(@Valid @RequestBody User user) {
 		User addUser = adminService.addUser(user);
 		return addUser;
 	}
 
 	// used to update user records
 	@PatchMapping("/admin/user")
-	public User updateUser(@RequestBody User user) {   
+	public User updateUser(@Valid @RequestBody User user) {   
 		User addUser = adminService.addUser(user);
 		return addUser;
 	}
@@ -73,7 +78,7 @@ public class PayrollUserManagementApplication {
 	}
 
 	@GetMapping("/admin/deleteuser/{userid}")
-	public String deleteUserbyId(@PathVariable("userid") int userid) {
+	public ResponseEntity<?> deleteUserbyId(@PathVariable("userid") int userid) {
 		return adminService.deleteUserbyId(userid);
 	}
 	

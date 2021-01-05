@@ -3,6 +3,8 @@ package com.payroll.usermanagement.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
+
 import com.payroll.usermanagement.entities.Department;
 import com.payroll.usermanagement.entities.Role;
 import com.payroll.usermanagement.entities.User;
@@ -17,7 +19,7 @@ public interface AdminService {
 	
 	Optional<User> findUserbyId(int userid);
 	
-	String deleteUserbyId(int userid);
+	ResponseEntity<?> deleteUserbyId(int userid);
 	
 	List<User> deleteUsersbyId(List<String> values);
 	

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.payroll.usermanagement.entities.Department;
@@ -11,6 +13,7 @@ import com.payroll.usermanagement.entities.Role;
 import com.payroll.usermanagement.entities.User;
 import com.payroll.usermanagement.entities.Userdepartment;
 import com.payroll.usermanagement.entities.Userrole;
+import com.payroll.usermanagement.exceptionhandling.ResourceNotFoundException;
 import com.payroll.usermanagement.repositories.DepartmentRepository;
 import com.payroll.usermanagement.repositories.RoleRepository;
 import com.payroll.usermanagement.repositories.UserDepartmentRepository;
@@ -52,9 +55,13 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public String deleteUserbyId(int userid) {
+	public ResponseEntity<?> deleteUserbyId(int userid) {
+		Optional<User> id = userRepository.findById(userid);
+		if(id.isEmpty()) {
+			throw new ResourceNotFoundException("User with id " + userid + " not found");
+		}
 		userRepository.deleteById(userid);
-		return "user records deleted successfullly";
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@Override

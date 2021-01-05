@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,6 +18,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -36,10 +40,15 @@ public class User implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	@NotBlank
+	@NotEmpty
 	private String address;
 
 	private String city;
 
+	@javax.validation.constraints.Email
+	@NotBlank
+	@NotEmpty
 	private String email;
 
 	@Column(unique = true)
@@ -49,20 +58,27 @@ public class User implements Serializable {
 
 	private boolean enabled;
 
+	@NotBlank
+	@NotEmpty
 	private String name;
 
 	private byte[] password;
 
+	@NotBlank
+	@NotEmpty
 	private String phonenumber;
 
 	private String bankaccountnumber;
 
+	@Past
 	@Temporal(TemporalType.DATE)
 	private Date birthdate;
 
 	private String gender;
 
 	@Temporal(TemporalType.DATE)
+	@NotBlank
+	@NotEmpty
 	private Date hiredate;
 
 	private String maritalstatus;
