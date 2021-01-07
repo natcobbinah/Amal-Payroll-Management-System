@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,37 +41,41 @@ import com.wordnik.swagger.annotations.ApiResponses;
 @EnableCircuitBreaker
 @RestController
 @Api(value = "Admin and User_Login operations", description = "admin and UserLogin API")
+@RequestMapping("/v1")
 @CrossOrigin(maxAge = 3600)
-@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+@SpringBootApplication
 public class PayrollUserManagementApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PayrollUserManagementApplication.class, args);
 	}
 
+	// @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+
 	@Autowired
 	AdminService adminService;
 
 	@Autowired
 	UserCredentialsandRolesService userCredentialsandRoleService;
-	
+
 	/*****************************************************************
 	 * RESTFUL SERVICES ENDPOINTS FOR USER LOGIN AND ROLES ASSIGNMENT
 	 *****************************************************************/
+	// All these uri are versioned as (v1)
 	@GetMapping("/userLogin/{email}/{password}")
-	public Set<Userrole> verifyLoginRecords(@PathVariable("email") String email, 
-				@PathVariable("password") String password){
+	public Set<Userrole> verifyLoginRecords(@PathVariable("email") String email,
+			@PathVariable("password") String password) {
 		return userCredentialsandRoleService.verifyLoginRecords(email, password);
 	}
-	
+
 	/**************************************************
 	 * RESTFUL SERVICES ENDPOINTS FOR ADMIN
 	 **************************************************/
 	@PostMapping("/admin/user")
-	@ApiOperation(value = "Creates a  new User", notes="The newly created User with Id will be sent in the location "
+	@ApiOperation(value = "Creates a  new User", notes = "The newly created User with Id will be sent in the location "
 			+ "response header ", response = User.class)
-	@ApiResponses(value = {@ApiResponse(code = 201, message="User created successfully",response = User.class),
-						   @ApiResponse(code = 500, message = "Error creating user", response = ErrorDetail.class)})
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "User created successfully", response = User.class),
+			@ApiResponse(code = 500, message = "Error creating user", response = ErrorDetail.class) })
 	public User addUser(@Valid @RequestBody User user) {
 		User addUser = adminService.addUser(user);
 		return addUser;
@@ -77,24 +83,24 @@ public class PayrollUserManagementApplication {
 
 	// used to update user records
 	@PatchMapping("/admin/user")
-	public User updateUser(@Valid @RequestBody User user) {   
+	public User updateUser(@Valid @RequestBody User user) {
 		User addUser = adminService.addUser(user);
 		return addUser;
 	}
 
 	@GetMapping("/admin/user")
-	@ApiOperation(value = "Retrieves all Users", response = User.class, responseContainer ="List")
-	public List<User> getAllUsers() {
-		return adminService.getAllUsers();
+	@ApiOperation(value = "Retrieves all Users", response = User.class, responseContainer = "List")
+	public Iterable<User> getAllUsers(Pageable pageable) {
+		return adminService.getAllUsers(pageable);
 	}
 
 	@GetMapping("/admin/deleteuser/{userid}")
 	public ResponseEntity<?> deleteUserbyId(@PathVariable("userid") int userid) {
 		return adminService.deleteUserbyId(userid);
 	}
-	
+
 	@GetMapping("/admin/deleteusers")
-	public List<User> deleteMultipleUsers(@RequestParam List<String> values){
+	public Iterable<User> deleteMultipleUsers(@RequestParam List<String> values) {
 		return adminService.deleteUsersbyId(values);
 	}
 
@@ -102,12 +108,11 @@ public class PayrollUserManagementApplication {
 	public User disableUser(@PathVariable("employeeid") String employeeid) {
 		return adminService.disableUser(employeeid);
 	}
-	
+
 	@GetMapping("/admin/disableusers")
-	List<User> disableUsers(@RequestParam List<String> employeeid) {
+	Iterable<User> disableUsers(@RequestParam List<String> employeeid) {
 		return adminService.disableUsers(employeeid);
 	}
-	
 
 	@GetMapping("/admin/deleterole/{roleid}")
 	public String deleteRole(@PathVariable("roleid") int roleid) {
@@ -156,8 +161,8 @@ public class PayrollUserManagementApplication {
 	}
 
 	@GetMapping("/admin/role")
-	public List<Role> getAllRoles() {
-		return adminService.getAllRoles();
+	public Iterable<Role> getAllRoles(Pageable pageable) {
+		return adminService.getAllRoles(pageable);
 	}
 
 	@GetMapping("/admin/role/{roleid}")
@@ -172,13 +177,13 @@ public class PayrollUserManagementApplication {
 	}
 
 	@GetMapping("/admin/departments")
-	public List<Department> getAllDepartments() {
-		return adminService.getAllDepartments();
+	public Iterable<Department> getAllDepartments(Pageable pageable) {
+		return adminService.getAllDepartments(pageable);
 	}
 
 	@GetMapping("/admin/departments/{deptid}")
 	public Optional<Department> findDepartmentbyId(@PathVariable("deptid") int deptid) {
 		return adminService.findDepartmentbyId(deptid);
 	}
-	
+
 }

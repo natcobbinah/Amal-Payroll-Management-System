@@ -6,13 +6,14 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.payroll.usermanagement.entities.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends PagingAndSortingRepository<User, Integer> {
 
 	@Query(value="select * from users u where u.employeeid = :empid",
 			nativeQuery=true)
@@ -21,6 +22,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query(value="select * from users u where u.name = :name",
 			nativeQuery=true)
 	List<User> findUserByName(@Param("name") String name);
+	
+	@Query(value="select * from users u where u.name = :name",
+			nativeQuery=true)
+	Optional<User> findUserByNameSingle(@Param("name") String name);
 	
 	@Query(value= "select * from users u WHERE u.email = :email",
 			nativeQuery=true)

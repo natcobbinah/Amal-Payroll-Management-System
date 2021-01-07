@@ -1,9 +1,12 @@
 package com.payroll.usermanagement.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,7 @@ import com.payroll.usermanagement.entities.User;
 import com.payroll.usermanagement.entities.Userdepartment;
 import com.payroll.usermanagement.entities.Userrole;
 import com.payroll.usermanagement.exceptionhandling.ResourceNotFoundException;
+import com.payroll.usermanagement.passwordEncoder.PasswordEncoder;
 import com.payroll.usermanagement.repositories.DepartmentRepository;
 import com.payroll.usermanagement.repositories.RoleRepository;
 import com.payroll.usermanagement.repositories.UserDepartmentRepository;
@@ -40,13 +44,45 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public User addUser(User user) {
-		User addedUser = userRepository.save(user);
-		return addedUser;
+		//User addedUser = userRepository.save(user);
+		//return addedUser;
+		User usertoAdd = new User();
+		usertoAdd.setAddress(user.getAddress());
+		usertoAdd.setCity(user.getCity());
+		usertoAdd.setEmail(user.getEmail());
+		usertoAdd.setEmployeeid(user.getEmployeeid());
+		usertoAdd.setEmployeelevel(user.getEmployeelevel());
+		usertoAdd.setEnabled(user.getEnabled());
+		usertoAdd.setName(user.getName());
+		
+		String mypass = PasswordEncoder.encoder().encode(user.getPassword().toString());
+		usertoAdd.setPassword(mypass.getBytes());
+		
+		usertoAdd.setPhonenumber(user.getPhonenumber());
+		usertoAdd.setGender(user.getGender());
+		usertoAdd.setBirthdate(user.getBirthdate());
+		usertoAdd.setHiredate(user.getHiredate());
+		usertoAdd.setMaritalstatus(user.getMaritalstatus());
+		usertoAdd.setBankaccountnumber(user.getBankaccountnumber());
+		usertoAdd.setBirthcertid(user.getBirthcertid());
+		usertoAdd.setDriverslicenseid(user.getDriverslicenseid());
+		usertoAdd.setPassportid(user.getPassportid());
+		usertoAdd.setSsnitid(user.getSsnitid());
+		usertoAdd.setVotersid(user.getVotersid());
+		usertoAdd.setUserroles(user.getUserroles());
+		usertoAdd.setUserdepartments(user.getUserdepartments());;
+		
+		return userRepository.save(usertoAdd);
 	}
 
+	/*****************************************************
+	 * Implementing paging and sorting to data
+	 * which may be very large on an API call request
+	 *****************************************************/
 	@Override
-	public List<User> getAllUsers() {
-		return userRepository.findAll();
+	public Iterable<User> getAllUsers(Pageable pageable) {
+		Page<User> allUsers = userRepository.findAll(pageable);
+		return allUsers;
 	}
 
 	@Override
@@ -106,8 +142,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<Role> getAllRoles() {
-		return roleRepository.findAll();
+	public Iterable<Role> getAllRoles(Pageable pageable) {
+		 Page<Role> allRoles = roleRepository.findAll(pageable);
+		 return allRoles;
 	}
 
 	@Override
@@ -128,8 +165,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<Department> getAllDepartments() {
-		return departmentRepository.findAll();
+	public Iterable<Department> getAllDepartments(Pageable pageable) {
+		 Page<Department> allDepartments = departmentRepository.findAll(pageable);
+		 return allDepartments;
 	}
 
 	@Override
@@ -144,7 +182,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<User> deleteUsersbyId(List<String> values) {
+	public Iterable<User> deleteUsersbyId(List<String> values) {
 		for (int i = 0; i < values.size(); i++) {
 			userRepository.deleteById(Integer.parseInt(values.get(i)));
 		}
@@ -152,7 +190,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<User> disableUsers(List<String> employeeids) {
+	public Iterable<User> disableUsers(List<String> employeeids) {
 		for (int i = 0; i < employeeids.size(); i++) {
 			User user = userRepository.findUserByemployeeid(employeeids.get(i));
 			if (user.getEnabled() == true) {

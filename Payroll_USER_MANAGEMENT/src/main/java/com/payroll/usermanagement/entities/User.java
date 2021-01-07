@@ -61,6 +61,7 @@ public class User implements Serializable {
 	@NotEmpty
 	private String name;
 
+	@JsonIgnore
 	private byte[] password;
 
 	@NotBlank

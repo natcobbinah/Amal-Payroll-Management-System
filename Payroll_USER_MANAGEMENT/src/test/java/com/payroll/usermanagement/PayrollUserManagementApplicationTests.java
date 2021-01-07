@@ -13,6 +13,7 @@ import com.payroll.usermanagement.entities.Role;
 import com.payroll.usermanagement.entities.User;
 import com.payroll.usermanagement.entities.Userdepartment;
 import com.payroll.usermanagement.entities.Userrole;
+import com.payroll.usermanagement.passwordEncoder.PasswordEncoder;
 import com.payroll.usermanagement.repositories.DepartmentRepository;
 import com.payroll.usermanagement.repositories.RoleRepository;
 import com.payroll.usermanagement.repositories.UserDepartmentRepository;
@@ -44,14 +45,16 @@ class PayrollUserManagementApplicationTests {
 	// -----------start user CRUD operations unit tests------------------------
 	@Test
 	public void addUser() {// works
-		userRepository.save(new User("P.O.BOX MC 3292,Niger", "Accra", "Big@gmail.com", "0001BIG", "Senior Associate", true,
-				"Big big", "big".getBytes(), "0554036804","Male",new Date(),new Date(),"Single","9269768967967868","BIGT34","DRV354","PASSPORT3453",
-				"SSNIT345345","VRTS2235"));
+		byte[] mypass = PasswordEncoder.encoder().encode("fif").getBytes();
+		
+		userRepository.save(new User("P.O.BOX MC 3292,Niger", "Accra", "fif@gmail.com", "0001FIF", "Senior Associate", true,
+				"fif fif", mypass, "1554993556804","Male",new Date(),new Date(),"Single","19669967967868","FIFT34","DRV3549404","PASSPORT0993773",
+				"SSNIT997345","VRTS86995"));
 	}
 
 	@Test
 	public void getAllUsers() {// works
-		List<User> findAll = userRepository.findAll();
+		Iterable<User> findAll = userRepository.findAll();
 		for (User u : findAll) {
 			System.out.println(u);
 		}
@@ -80,6 +83,13 @@ class PayrollUserManagementApplicationTests {
 		for(User u: findUserByName) {
 			System.out.println(u);
 		}
+	}
+	
+	//find by a single username
+	@Test
+	public void findByUsernameSingle() {//works
+		Optional<User> user = userRepository.findUserByNameSingle("fif fif");
+		System.out.println(user);
 	}
 
 	@Test
@@ -158,7 +168,7 @@ class PayrollUserManagementApplicationTests {
 
 	@Test
 	public void getAllDepartments() {// works
-		List<Department> findAll = departmentRepository.findAll();
+		Iterable<Department> findAll = departmentRepository.findAll();
 		for (Department d : findAll) {
 			System.out.println(d);
 		}
@@ -178,9 +188,10 @@ class PayrollUserManagementApplicationTests {
 	// -----------start Userrole CRUD operations unit tests------------------------
 	@Test
 	public void addUserRole() {// works
-		userroleRepository.save(new Userrole(1, 1));
-		userroleRepository.save(new Userrole(2, 3));
-		userroleRepository.save(new Userrole(2, 4));
+		//int userid, int roleid
+		//userroleRepository.save(new Userrole(8, 3));
+		userroleRepository.save(new Userrole(8, 4));
+		userroleRepository.save(new Userrole(9, 1));
 	}
 
 	@Test
@@ -193,9 +204,15 @@ class PayrollUserManagementApplicationTests {
 
 	@Test
 	public void getUsersByUserrole() {// works
-		List<Userrole> role = userroleRepository.getUsersByRole(1);
-		for (Userrole usr : role) {
-			System.out.println(usr);
+		List<Userrole> userrole = userroleRepository.getUsersByRole(8);
+		if(!userrole.isEmpty()) {
+			for(Userrole u : userrole) {
+				if(u.getRole().getRolename() == "ADMIN" ) {
+					System.out.println("yes he is an admin");
+				}else {
+					System.out.println("Nothing found");
+				}
+			}
 		}
 	}
 
@@ -204,7 +221,8 @@ class PayrollUserManagementApplicationTests {
 	@Test
 	public void addUserDepartment() {// works
 		//userDepartmentRepository.save(new Userdepartment(1, 1));
-		userDepartmentRepository.save(new Userdepartment(2, 2));
+		userDepartmentRepository.save(new Userdepartment(8, 1));
+		userDepartmentRepository.save(new Userdepartment(9, 2));
 	}
 
 	@Test
@@ -225,7 +243,9 @@ class PayrollUserManagementApplicationTests {
 	
 	@Test
 	public void verifyLoginRecords() {// works
-		Optional<User>	userRecord= userRepository.getUserByEmailandPassword("kat@gmail.com", "kat".getBytes());
+		byte[] mypass = PasswordEncoder.encoder().encode("hig").getBytes();
+		
+		Optional<User>	userRecord= userRepository.getUserByEmailandPassword("gig@gmail.com",mypass);
 		if(userRecord.isPresent()) {
 			System.out.println(userRecord.get().getEmail() + " : " + userRecord.get().getPassword() + " : " + 
 					userRecord.get().getUserroles() + userRecord.get().getEnabled());
