@@ -45,11 +45,11 @@ class PayrollUserManagementApplicationTests {
 	// -----------start user CRUD operations unit tests------------------------
 	@Test
 	public void addUser() {// works
-		byte[] mypass = PasswordEncoder.encoder().encode("fif").getBytes();
+		String mypass = PasswordEncoder.encoder().encode("test");
 		
-		userRepository.save(new User("P.O.BOX MC 3292,Niger", "Accra", "fif@gmail.com", "0001FIF", "Senior Associate", true,
-				"fif fif", mypass, "1554993556804","Male",new Date(),new Date(),"Single","19669967967868","FIFT34","DRV3549404","PASSPORT0993773",
-				"SSNIT997345","VRTS86995"));
+		userRepository.save(new User("P.O.BOX MC 3292,Niger", "Accra", "test@gmail.com", "0001TEST", "Senior Associate", true,
+				"Test", mypass, "155499355644","Male",new Date(),new Date(),"Single","19669954337868","TESTT34","DRV354445","PASSPORT09454",
+				"SSNIT94545","VRTS845495"));
 	}
 
 	@Test
@@ -243,11 +243,10 @@ class PayrollUserManagementApplicationTests {
 	
 	@Test
 	public void verifyLoginRecords() {// works
-		byte[] mypass = PasswordEncoder.encoder().encode("hig").getBytes();
 		
-		Optional<User>	userRecord= userRepository.getUserByEmailandPassword("gig@gmail.com",mypass);
+		Optional<User>	userRecord= userRepository.getUserByEmailandPassword("fif@gmail.com","$2a$10$vmPl/q95b6WAScDjYY0VteyCNvvsL75rwRXQ8NbarvNTqALiLUx1m".getBytes());
 		if(userRecord.isPresent()) {
-			System.out.println(userRecord.get().getEmail() + " : " + userRecord.get().getPassword() + " : " + 
+			System.out.println(userRecord.get().getEmail() + " : " + userRecord.get().getPassword().toString() + " : " + 
 					userRecord.get().getUserroles() + userRecord.get().getEnabled());
 		}else {
 			System.out.println("No record of user found in the system: Login failed");

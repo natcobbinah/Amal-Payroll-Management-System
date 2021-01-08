@@ -59,10 +59,10 @@ public class User implements Serializable {
 
 	@NotBlank
 	@NotEmpty
-	private String name;
+	private String username;
 
 	@JsonIgnore
-	private byte[] password;
+	private String password;
 
 	@NotBlank
 	@NotEmpty
@@ -105,7 +105,7 @@ public class User implements Serializable {
 	}
 
 	public User(String address, String city, String email, String employeeid, String employeelevel, boolean enabled,
-			String name, byte[] password, String phonenumber, String gender, Date birthdate, Date hiredate,
+			String name, String password, String phonenumber, String gender, Date birthdate, Date hiredate,
 			String maritalstatus, String bankaccountnumber, String birthcertid,String driverslicenseid,String passportid,String ssnitid,String votersid) {
 		super();
 		this.address = address;
@@ -114,7 +114,7 @@ public class User implements Serializable {
 		this.employeeid = employeeid;
 		this.employeelevel = employeelevel;
 		this.enabled = enabled;
-		this.name = name;
+		this.username = name;
 		this.password = password;
 		this.phonenumber = phonenumber;
 		this.gender = gender;
@@ -231,27 +231,27 @@ public class User implements Serializable {
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return username;
 	}
 
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
-		this.name = name;
+		this.username = name;
 	}
 
 	/**
 	 * @return the password
 	 */
-	public byte[] getPassword() {
+	public String getPassword() {
 		return password;
 	}
 
 	/**
 	 * @param password the password to set
 	 */
-	public void setPassword(byte[] password) {
+	public void setPassword(String password) {
 		this.password = password;
 	}
 
@@ -461,13 +461,9 @@ public class User implements Serializable {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Arrays.hashCode(password);
-		result = prime * result + Objects.hash(address, bankaccountnumber, birthcertid, birthdate, city,
-				driverslicenseid, email, employeeid, employeelevel, enabled, gender, hiredate, id, maritalstatus, name,
-				passportid, phonenumber, ssnitid, userdepartments, userroles, votersid);
-		return result;
+		return Objects.hash(address, bankaccountnumber, birthcertid, birthdate, city, driverslicenseid, email,
+				employeeid, employeelevel, enabled, gender, hiredate, id, maritalstatus, passportid, password,
+				phonenumber, ssnitid, userdepartments, username, userroles, votersid);
 	}
 
 	@Override
@@ -485,10 +481,10 @@ public class User implements Serializable {
 				&& Objects.equals(email, other.email) && Objects.equals(employeeid, other.employeeid)
 				&& Objects.equals(employeelevel, other.employeelevel) && enabled == other.enabled
 				&& Objects.equals(gender, other.gender) && Objects.equals(hiredate, other.hiredate) && id == other.id
-				&& Objects.equals(maritalstatus, other.maritalstatus) && Objects.equals(name, other.name)
-				&& Objects.equals(passportid, other.passportid) && Arrays.equals(password, other.password)
-				&& Objects.equals(phonenumber, other.phonenumber) && Objects.equals(ssnitid, other.ssnitid)
-				&& Objects.equals(userdepartments, other.userdepartments) && Objects.equals(userroles, other.userroles)
+				&& Objects.equals(maritalstatus, other.maritalstatus) && Objects.equals(passportid, other.passportid)
+				&& Objects.equals(password, other.password) && Objects.equals(phonenumber, other.phonenumber)
+				&& Objects.equals(ssnitid, other.ssnitid) && Objects.equals(userdepartments, other.userdepartments)
+				&& Objects.equals(username, other.username) && Objects.equals(userroles, other.userroles)
 				&& Objects.equals(votersid, other.votersid);
 	}
 

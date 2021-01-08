@@ -19,13 +19,13 @@ public interface UserRepository extends PagingAndSortingRepository<User, Integer
 			nativeQuery=true)
 	User findUserByemployeeid(@Param("empid")String empid);
 	
-	@Query(value="select * from users u where u.name = :name",
+	@Query(value="select * from users u where u.username = :username",
 			nativeQuery=true)
-	List<User> findUserByName(@Param("name") String name);
+	List<User> findUserByName(@Param("username") String username);
 	
-	@Query(value="select * from users u where u.name = :name",
+	@Query(value="select * from users u where u.username = :username",
 			nativeQuery=true)
-	Optional<User> findUserByNameSingle(@Param("name") String name);
+	Optional<User> findUserByNameSingle(@Param("username") String username);
 	
 	@Query(value= "select * from users u WHERE u.email = :email",
 			nativeQuery=true)

@@ -55,8 +55,8 @@ public class AdminServiceImpl implements AdminService {
 		usertoAdd.setEnabled(user.getEnabled());
 		usertoAdd.setName(user.getName());
 		
-		String mypass = PasswordEncoder.encoder().encode(user.getPassword().toString());
-		usertoAdd.setPassword(mypass.getBytes());
+		String mypass = PasswordEncoder.encoder().encode(user.getPassword());
+		usertoAdd.setPassword(mypass);
 		
 		usertoAdd.setPhonenumber(user.getPhonenumber());
 		usertoAdd.setGender(user.getGender());

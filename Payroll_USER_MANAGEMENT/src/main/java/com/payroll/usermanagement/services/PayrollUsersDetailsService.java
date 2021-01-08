@@ -28,7 +28,7 @@ public class PayrollUsersDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Optional<User> user = userRepository.findUserByNameSingle(username);
 		
-		if(user.isEmpty()) {
+		if(!user.isPresent()) {
 			throw new UsernameNotFoundException("User with username " + username + "doesn't exist");
 		}
 		
