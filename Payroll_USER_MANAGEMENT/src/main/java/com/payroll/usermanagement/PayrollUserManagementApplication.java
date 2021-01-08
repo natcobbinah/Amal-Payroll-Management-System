@@ -14,6 +14,7 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -41,7 +42,7 @@ import com.wordnik.swagger.annotations.ApiResponses;
 @EnableCircuitBreaker
 @RestController
 @Api(value = "Admin and User_Login operations", description = "admin and UserLogin API")
-@RequestMapping("/v1")
+@RequestMapping({"/v1"})
 @CrossOrigin(maxAge = 3600)
 @SpringBootApplication
 public class PayrollUserManagementApplication {
@@ -49,8 +50,6 @@ public class PayrollUserManagementApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PayrollUserManagementApplication.class, args);
 	}
-
-	// @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 
 	@Autowired
 	AdminService adminService;
@@ -94,6 +93,7 @@ public class PayrollUserManagementApplication {
 		return adminService.getAllUsers(pageable);
 	}
 
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/admin/deleteuser/{userid}")
 	public ResponseEntity<?> deleteUserbyId(@PathVariable("userid") int userid) {
 		return adminService.deleteUserbyId(userid);
