@@ -12,8 +12,9 @@ import com.payroll.usermanagement.entities.Userrole;
 @Repository
 public interface UserroleRepository extends JpaRepository<Userrole, Integer> {
 
-	@Query("from Userrole u where u.role.roleid = :id")
-	List<Userrole> getUsersByRole(@Param("id") Integer id);
+	@Query("from Userrole u where u.user.id = :userid")
+	List<Userrole> getUsersByRole(@Param("userid") Integer userid);
+	
 	
 }
 

@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import javax.persistence.*;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -14,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "userroles")
 @NamedQuery(name = "Userrole.findAll", query = "SELECT u FROM Userrole u")
-public class Userrole implements Serializable {
+public class Userrole extends RepresentationModel<Userrole> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

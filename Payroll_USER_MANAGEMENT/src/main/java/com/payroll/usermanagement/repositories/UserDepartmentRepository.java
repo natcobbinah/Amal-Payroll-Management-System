@@ -13,6 +13,6 @@ import com.payroll.usermanagement.entities.Userdepartment;
 @Repository
 public interface UserDepartmentRepository extends JpaRepository<Userdepartment, Integer> {
 
-	@Query("from Userdepartment d where d.department.id = :id")
-	List<Userdepartment> getUsersbyDepartment(@Param("id") Integer id);
+	@Query("from Userdepartment d where d.user.id = :userid")
+	List<Userdepartment> getUsersbyDepartment(@Param("userid") Integer userid);
 }

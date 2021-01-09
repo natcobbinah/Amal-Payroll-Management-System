@@ -3,6 +3,8 @@ package com.payroll.usermanagement.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.Objects;
  */
 @Entity
 @NamedQuery(name = "Department.findAll", query = "SELECT d FROM Department d")
-public class Department implements Serializable {
+public class Department extends RepresentationModel<Department> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

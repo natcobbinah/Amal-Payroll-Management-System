@@ -1,18 +1,21 @@
 package com.payroll.usermanagement;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.Link;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.payroll.usermanagement.entities.Department;
 import com.payroll.usermanagement.entities.Role;
@@ -42,7 +46,7 @@ import com.wordnik.swagger.annotations.ApiResponses;
 @EnableCircuitBreaker
 @RestController
 @Api(value = "Admin and User_Login operations", description = "admin and UserLogin API")
-@RequestMapping({"/v1"})
+@RequestMapping({ "/v1" })
 @CrossOrigin(maxAge = 3600)
 @SpringBootApplication
 public class PayrollUserManagementApplication {
@@ -77,6 +81,12 @@ public class PayrollUserManagementApplication {
 			@ApiResponse(code = 500, message = "Error creating user", response = ErrorDetail.class) })
 	public User addUser(@Valid @RequestBody User user) {
 		User addUser = adminService.addUser(user);
+
+		// set the location header for the newly created resource
+		HttpHeaders responseHeaders = new HttpHeaders();
+		URI newUserUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId())
+				.toUri();
+		responseHeaders.setLocation(newUserUri);
 		return addUser;
 	}
 
@@ -90,7 +100,11 @@ public class PayrollUserManagementApplication {
 	@GetMapping("/admin/user")
 	@ApiOperation(value = "Retrieves all Users", response = User.class, responseContainer = "List")
 	public Iterable<User> getAllUsers(Pageable pageable) {
-		return adminService.getAllUsers(pageable);
+		Iterable<User> allUsers = adminService.getAllUsers(pageable);
+		for (User user : allUsers) {
+			updateUserResourceWithLinks(user, pageable);
+		}
+		return allUsers;
 	}
 
 	@PreAuthorize("hasAuthority('ADMIN')")
@@ -124,9 +138,10 @@ public class PayrollUserManagementApplication {
 		return adminService.deleteDepartment(departmentid);
 	}
 
-	@GetMapping("/admin/userid/{userid}")
-	public Optional<User> findUserById(@PathVariable("userid") int userid) {
-		return adminService.findUserbyId(userid);
+	@GetMapping("/admin/user/{userid}")
+	public User findUserById(@PathVariable("userid") int userid) {
+		User user = adminService.findUserbyId(userid);
+		return user;
 	}
 
 	@GetMapping("/admin/empid/{employeeid}")
@@ -144,14 +159,14 @@ public class PayrollUserManagementApplication {
 		return adminService.findUserByEmail(email);
 	}
 
-	@GetMapping("/admin/userroles/{roleid}")
-	public List<Userrole> getUsersbyRole(@PathVariable("roleid") int roleid) {
-		return adminService.getUsersbyRole(roleid);
+	@GetMapping("/admin/userroles/{userid}")
+	public List<Userrole> getUsersbyRole(@PathVariable("userid") int userid) {
+		return adminService.getUsersbyRole(userid);
 	}
 
-	@GetMapping("/admin/userdepartment/{deptid}")
-	public List<Userdepartment> getUserbyDepartment(@PathVariable("deptid") int deptid) {
-		return adminService.getUserbyDepartment(deptid);
+	@GetMapping("/admin/userdepartment/{userid}")
+	public List<Userdepartment> getUserbyDepartment(@PathVariable("userid") int userid) {
+		return adminService.getUserbyDepartment(userid);
 	}
 
 	@PostMapping("/admin/role")
@@ -186,4 +201,16 @@ public class PayrollUserManagementApplication {
 		return adminService.findDepartmentbyId(deptid);
 	}
 
+	private void updateUserResourceWithLinks(User user, Pageable pageable) {
+		user.add(linkTo(methodOn(PayrollUserManagementApplication.class).getAllUsers(pageable)).slash(user.getId())
+				.withSelfRel());
+
+		user.add(linkTo(methodOn(PayrollUserManagementApplication.class).getUsersbyRole(user.getId()))
+				.withRel("Userroles"));
+
+		user.add(linkTo(methodOn(PayrollUserManagementApplication.class).getUserbyDepartment(user.getId()))
+				.withRel("Userdepartments"));
+	}
+	
+	//you can add .slash(path) to extend the above resourcelinks if the path involves (/)paths
 }

@@ -1,7 +1,6 @@
 package com.payroll.usermanagement.entities;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
@@ -22,6 +21,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
 
+import org.springframework.hateoas.RepresentationModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "users")
 @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
-public class User implements Serializable {
+public class User extends RepresentationModel<User> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

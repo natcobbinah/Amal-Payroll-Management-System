@@ -1,11 +1,16 @@
 package com.payroll.usermanagement.entities;
 
 import java.io.Serializable;
-import java.util.Objects;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.hateoas.RepresentationModel;
 
 /**
  * The persistent class for the userdepartment database table.
@@ -13,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Entity
 @NamedQuery(name = "Userdepartment.findAll", query = "SELECT u FROM Userdepartment u")
-public class Userdepartment implements Serializable {
+public class Userdepartment extends RepresentationModel<Userdepartment> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

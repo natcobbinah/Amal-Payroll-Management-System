@@ -1,12 +1,21 @@
 package com.payroll.usermanagement.entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.List;
 import java.util.Objects;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.springframework.hateoas.RepresentationModel;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * The persistent class for the roles database table.
@@ -15,7 +24,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "roles")
 @NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r")
-public class Role implements Serializable {
+public class  Role extends RepresentationModel<Role> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

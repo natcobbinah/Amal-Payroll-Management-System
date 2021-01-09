@@ -18,7 +18,7 @@ public interface AdminService {
 	
 	Iterable<User> getAllUsers(Pageable pageable);
 	
-	Optional<User> findUserbyId(int userid);
+	User findUserbyId(int userid);
 	
 	ResponseEntity<?> deleteUserbyId(int userid);
 	
@@ -34,9 +34,9 @@ public interface AdminService {
 	
 	User disableUser(String employeeid);
 	
-	List<Userrole> getUsersbyRole(int roleid);
+	List<Userrole> getUsersbyRole(int userid);
 	
-	List<Userdepartment> getUserbyDepartment(int departmentid);
+	List<Userdepartment> getUserbyDepartment(int userid);
 	
 	Role addRole(Role role);
 	

@@ -86,8 +86,8 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Optional<User> findUserbyId(int userid) {
-		return userRepository.findById(userid);
+	public User findUserbyId(int userid) {
+		return userRepository.findById(userid).get();
 	}
 
 	@Override
@@ -126,13 +126,13 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<Userrole> getUsersbyRole(int roleid) {
-		return userroleRepository.getUsersByRole(roleid);
+	public List<Userrole> getUsersbyRole(int userid) {
+		return userroleRepository.getUsersByRole(userid);
 	}
 
 	@Override
-	public List<Userdepartment> getUserbyDepartment(int departmentid) {
-		return userdepartmentRepository.getUsersbyDepartment(departmentid);
+	public List<Userdepartment> getUserbyDepartment(int userid) {
+		return userdepartmentRepository.getUsersbyDepartment(userid);
 	}
 
 	@Override
