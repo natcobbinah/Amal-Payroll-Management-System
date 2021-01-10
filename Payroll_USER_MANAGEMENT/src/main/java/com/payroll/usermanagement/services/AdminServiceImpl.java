@@ -201,4 +201,9 @@ public class AdminServiceImpl implements AdminService {
 		return userRepository.findAll();
 	}
 
+	@Override
+	public void deleteUser(User user) {
+		userRepository.delete(user);
+	}
+
 }

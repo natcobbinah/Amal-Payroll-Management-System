@@ -16,6 +16,8 @@ public interface AdminService {
 
 	User addUser(User user);
 	
+	void deleteUser(User user);
+	
 	Iterable<User> getAllUsers(Pageable pageable);
 	
 	User findUserbyId(int userid);

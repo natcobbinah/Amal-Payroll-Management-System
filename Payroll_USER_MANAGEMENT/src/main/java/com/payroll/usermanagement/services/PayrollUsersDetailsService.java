@@ -25,18 +25,18 @@ public class PayrollUsersDetailsService implements UserDetailsService {
 	UserRepository userRepository;
 	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<User> user = userRepository.findUserByNameSingle(username);
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		User user = userRepository.getUserByEmail(email);
 		
-		if(!user.isPresent()) {
-			throw new UsernameNotFoundException("User with username " + username + "doesn't exist");
+		if(user == null) {
+			throw new UsernameNotFoundException("User with email " + email + "doesn't exist");
 		}
 		
 		//create a granted authority based on user's role
 		//can't pass null authorities to user. Hence initialize with an empty arraylist
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		if(user.get().getEnabled() == true) {
-			Set<Userrole> userroles =  user.get().getUserroles();
+		if(user.getEnabled() == true) {
+			Set<Userrole> userroles =  user.getUserroles();
 			for(Userrole u: userroles) {
 				authorities = AuthorityUtils.createAuthorityList(u.getRole().getRolename());
 			}
@@ -44,9 +44,8 @@ public class PayrollUsersDetailsService implements UserDetailsService {
 		
 		//create a UserDetails object from the data
 		UserDetails userDetails = new org.springframework.security.core.userdetails.User
-				(user.get().getName(),user.get().getPassword().toString(),authorities);
+				(user.getName(),user.getPassword(),authorities);
 		
 		return userDetails;
 	}
-
 }
