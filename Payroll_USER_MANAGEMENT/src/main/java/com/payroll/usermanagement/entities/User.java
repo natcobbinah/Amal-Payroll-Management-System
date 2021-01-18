@@ -8,10 +8,13 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -61,7 +64,7 @@ public class User extends RepresentationModel<User> implements Serializable {
 	@NotEmpty
 	private String username;
 
-	@JsonIgnore
+	//@JsonIgnore
 	private String password;
 
 	@NotBlank
@@ -422,7 +425,7 @@ public class User extends RepresentationModel<User> implements Serializable {
 	public void setVotersid(String votersid) {
 		this.votersid = votersid;
 	}
-
+	
 	public Userdepartment addUserdepartment(Userdepartment userdepartment) {
 		getUserdepartments().add(userdepartment);
 		userdepartment.setUser(this);

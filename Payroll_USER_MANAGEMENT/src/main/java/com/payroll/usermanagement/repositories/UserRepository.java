@@ -32,10 +32,11 @@ public interface UserRepository extends PagingAndSortingRepository<User, Integer
 
 	@Query(value= "select * from users  u where u.email= :email and u.password= :password",
 			nativeQuery=true)
-	Optional<User> getUserByEmailandPassword(@Param("email") String email, @Param("password") byte[] password);
+	Optional<User> getUserByEmailandPassword(@Param("email") String email, @Param("password") String password);
 
 	@Modifying
 	@Query(value="delete from users u where u.employeeid = :empid",
 			nativeQuery=true)
 	void disableandDeleteUser(@Param("empid")String empid);
+
 }

@@ -26,7 +26,7 @@ public interface AdminService {
 	
 	Iterable<User> deleteUsersbyId(List<String> values);
 	
-	Iterable<User> disableUsers(List<String> employeeid);
+	Iterable<User> disableUsers(List<String> useridvalues);
 	
 	User findUserByEmployeeid(String employeeid);
 	
@@ -37,6 +37,8 @@ public interface AdminService {
 	User disableUser(String employeeid);
 	
 	List<Userrole> getUsersbyRole(int userid);
+	
+	Iterable<Userrole> getAllUserRoles(Pageable pageable);
 	
 	List<Userdepartment> getUserbyDepartment(int userid);
 	

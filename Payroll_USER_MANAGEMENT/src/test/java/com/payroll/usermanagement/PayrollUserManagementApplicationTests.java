@@ -3,10 +3,12 @@ package com.payroll.usermanagement;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.authority.AuthorityUtils;
 
 import com.payroll.usermanagement.entities.Department;
 import com.payroll.usermanagement.entities.Role;
@@ -38,8 +40,29 @@ class PayrollUserManagementApplicationTests {
 	@Autowired
 	UserroleRepository userroleRepository;
 
+	@Test
+	public void getUsersByUserrole() {// works
+		List<Userrole> userrole = userroleRepository.getUsersByRole(48);
+		for (Userrole u : userrole) {
+			System.out.println(u.getRole().getRolename());
+		}
+	}
+
+	// String address, String city, String email, String employeeid, String
+	// employeelevel, boolean enabled,
+	// String name, String password, String phonenumber, String gender, Date
+	// birthdate, Date hiredate,
+	// String maritalstatus, String bankaccountnumber, String birthcertid,String
+	// driverslicenseid,String passportid,String ssnitid,String votersid
+
 	/*
-	 * @Autowired Usereligibilityforwork usereligibilityforworkRepository;
+	 * @Test public void addUser() {// works String mypass =
+	 * PasswordEncoder.encoder().encode("test1");
+	 * 
+	 * userRepository.save(new User("P.O.BOX MC 3292,Niger", "Accra",
+	 * "test2166@gmail.com", "0001TEST266", "Senior Associate", true, "Test266",
+	 * mypass, "26116", "Male", new Date(), new Date(), "Single", "266", "TEST266",
+	 * "DRV266", "PASS266", "SSNIT266", "VRT266")); }
 	 */
 
 	// -----------start user CRUD operations unit tests------------------------

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import com.payroll.usermanagement.entities.User;
 import com.payroll.usermanagement.entities.Userrole;
 import com.payroll.usermanagement.repositories.UserRepository;
+import com.payroll.usermanagement.repositories.UserroleRepository;
 
 @Component
 public class PayrollUsersDetailsService implements UserDetailsService {
@@ -24,28 +25,30 @@ public class PayrollUsersDetailsService implements UserDetailsService {
 	@Autowired
 	UserRepository userRepository;
 	
+	@Autowired
+	UserroleRepository userroleRepository;
+
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		User user = userRepository.getUserByEmail(email);
-		
-		if(user == null) {
+
+		if (user == null) {
 			throw new UsernameNotFoundException("User with email " + email + "doesn't exist");
 		}
-		
-		//create a granted authority based on user's role
-		//can't pass null authorities to user. Hence initialize with an empty arraylist
+
+		// create a granted authority based on user's role
+		// can't pass null authorities to user. Hence initialize with an empty arraylist
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		if(user.getEnabled() == true) {
-			Set<Userrole> userroles =  user.getUserroles();
-			for(Userrole u: userroles) {
-				authorities = AuthorityUtils.createAuthorityList(u.getRole().getRolename());
-			}
+		List<Userrole> userrole = userroleRepository.getUsersByRole(user.getId()); //get userroles by id from user object
+		for (Userrole u : userrole) {
+			authorities = AuthorityUtils.createAuthorityList(u.getRole().getRolename());
+			System.out.println(authorities);
 		}
-		
-		//create a UserDetails object from the data
-		UserDetails userDetails = new org.springframework.security.core.userdetails.User
-				(user.getName(),user.getPassword(),authorities);
-		
+
+		// create a UserDetails object from the data
+		UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getName(),
+				user.getPassword(), authorities);
+
 		return userDetails;
 	}
 }

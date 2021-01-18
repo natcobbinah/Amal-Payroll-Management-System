@@ -18,7 +18,7 @@ public class UserCredentialsandRolesServiceImpl implements UserCredentialsandRol
 	
 	@Override
 	public Set<Userrole> verifyLoginRecords(String email, String password) {
-		Optional<User> userRecord = userRepository.getUserByEmailandPassword(email, password.getBytes());
+		Optional<User> userRecord = userRepository.getUserByEmailandPassword(email, password);
 		if(userRecord.isEmpty()) {
 			//custom failure login message
 		}

@@ -52,7 +52,8 @@ public class AdminServiceImpl implements AdminService {
 		usertoAdd.setEmail(user.getEmail());
 		usertoAdd.setEmployeeid(user.getEmployeeid());
 		usertoAdd.setEmployeelevel(user.getEmployeelevel());
-		usertoAdd.setEnabled(user.getEnabled());
+		
+		usertoAdd.setEnabled(true); //user is by default set as as enabled 
 		usertoAdd.setName(user.getName());
 		
 		String mypass = PasswordEncoder.encoder().encode(user.getPassword());
@@ -69,8 +70,6 @@ public class AdminServiceImpl implements AdminService {
 		usertoAdd.setPassportid(user.getPassportid());
 		usertoAdd.setSsnitid(user.getSsnitid());
 		usertoAdd.setVotersid(user.getVotersid());
-		usertoAdd.setUserroles(user.getUserroles());
-		usertoAdd.setUserdepartments(user.getUserdepartments());;
 		
 		return userRepository.save(usertoAdd);
 	}
@@ -190,9 +189,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Iterable<User> disableUsers(List<String> employeeids) {
-		for (int i = 0; i < employeeids.size(); i++) {
-			User user = userRepository.findUserByemployeeid(employeeids.get(i));
+	public Iterable<User> disableUsers(List<String> useridvalues) {
+		for (int i = 0; i < useridvalues.size(); i++) {
+			User user = userRepository.findById(Integer.parseInt(useridvalues.get(i))).get();
 			if (user.getEnabled() == true) {
 				user.setEnabled(false);
 				userRepository.save(user);
@@ -204,6 +203,16 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void deleteUser(User user) {
 		userRepository.delete(user);
+	}
+	
+	/*
+	 * public Iterable<Role> getAllRoles(Pageable pageable) { Page<Role> allRoles =
+	 * roleRepository.findAll(pageable); return allRoles; }
+	 */
+	@Override
+	public Iterable<Userrole> getAllUserRoles(Pageable pageable) {
+		 Page<Userrole> alluserroles = userroleRepository.findAll(pageable);
+		 return alluserroles;
 	}
 
 }
