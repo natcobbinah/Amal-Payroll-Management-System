@@ -46,7 +46,7 @@ public class PayrollUsersDetailsService implements UserDetailsService {
 		}
 
 		// create a UserDetails object from the data
-		UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getName(),
+		UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getEmail(),
 				user.getPassword(), authorities);
 
 		return userDetails;

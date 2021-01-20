@@ -1,10 +1,10 @@
 package com.payroll.usermanagement.services;
 
-import java.util.Set;
+import java.util.List;
 
 import com.payroll.usermanagement.entities.Userrole;
 
 public interface UserCredentialsandRolesService {
 
-	public Set<Userrole> verifyLoginRecords(String email, String password);
+	public List<Userrole> verifyLoginRecords(String email, String password);
 }

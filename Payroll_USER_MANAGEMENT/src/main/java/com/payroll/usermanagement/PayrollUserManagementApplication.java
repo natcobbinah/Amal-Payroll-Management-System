@@ -65,16 +65,16 @@ public class PayrollUserManagementApplication {
 	@Autowired
 	AdminService adminService;
 
-	@Autowired
-	UserCredentialsandRolesService userCredentialsandRoleService;
-
+	/*
+	 * @Autowired UserCredentialsandRolesService userCredentialsandRoleService;
+	 */
 	// All these uri are versioned as (v1)
 
-	@GetMapping("/userLogin/{email}/{password}")
-	public Set<Userrole> verifyLoginRecords(@PathVariable("email") String email,@PathVariable("password") String password) {
-		return userCredentialsandRoleService.verifyLoginRecords(email, password);
-	}
-	
+	/*
+	 * @GetMapping("test/userLogin") public List<Userrole>
+	 * verifyLoginRecords(@RequestParam String email,@RequestParam String password )
+	 * { return userCredentialsandRoleService.verifyLoginRecords(email, password); }
+	 */
 	
 	//URL FOR TESTING PURPOSES=================================================
 	@PostMapping("/test/user")
@@ -119,10 +119,16 @@ public class PayrollUserManagementApplication {
 		return adminService.getAllUserRoles(pageable); //NEED TO IMPLEMENT THIS METHOD BELOW
 	}
 	
-	@GetMapping("/login")
-	public void user(Principal principal) {
-		System.out.println(principal.getName());
+	@GetMapping("/test/userroles/{userid}")
+	public List<Userrole> getUsersbyRoleTest(@PathVariable("userid") int userid) {
+		return adminService.getUsersbyRole(userid);
 	}
+	
+	@GetMapping("/test/useremail/{email}")
+	public User findUserByEmailTest(@PathVariable("email") String email) {
+		return adminService.findUserByEmail(email);
+	}
+	
 	//END OF URL FOR TESTING PURPOSES===========================================
 
 	/**************************************************
@@ -274,7 +280,7 @@ public class PayrollUserManagementApplication {
 		return adminService.findUserByEmail(email);
 	}
 
-	@PreAuthorize("hasAuthority('EMPLOYEE')")
+	@PreAuthorize("hasAnyAuthority('EMPLOYEE','ADMIN','SUPER_ADMIN','ADMIN_HR')")
 	@GetMapping("/admin/userroles/{userid}")
 	@ApiOperation(value = "Finds user with Userroles by userID", notes = "Finds a user with corresponding user roles", response = Userrole.class)
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "User  found with  success", response = Userrole.class),
@@ -283,7 +289,7 @@ public class PayrollUserManagementApplication {
 		return adminService.getUsersbyRole(userid);
 	}
 
-	@PreAuthorize("hasAuthority('ADMIN')")
+	@PreAuthorize("hasAnyAuthority('EMPLOYEE','ADMIN','SUPER_ADMIN','ADMIN_HR')")
 	@GetMapping("/admin/userdepartment/{userid}")
 	@ApiOperation(value = "Finds user with Userdepartments by userID", notes = "Finds a user with corresponding user departments", response = Userdepartment.class)
 	@ApiResponses(value = {

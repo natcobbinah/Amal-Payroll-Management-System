@@ -40,14 +40,11 @@ class PayrollUserManagementApplicationTests {
 	@Autowired
 	UserroleRepository userroleRepository;
 
-	@Test
-	public void getUsersByUserrole() {// works
-		List<Userrole> userrole = userroleRepository.getUsersByRole(48);
-		for (Userrole u : userrole) {
-			System.out.println(u.getRole().getRolename());
-		}
-	}
-
+	/*
+	 * @Test public void getUsersByUserrole() {// works List<Userrole> userrole =
+	 * userroleRepository.getUsersByRole(48); for (Userrole u : userrole) {
+	 * System.out.println(u.getRole().getRolename()); } }
+	 */
 	// String address, String city, String email, String employeeid, String
 	// employeelevel, boolean enabled,
 	// String name, String password, String phonenumber, String gender, Date

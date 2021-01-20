@@ -42,8 +42,11 @@ public class User extends RepresentationModel<User> implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@NotBlank
-	@NotEmpty
+	/*
+	 * @NotBlank
+	 * 
+	 * @NotEmpty
+	 * not using this constraint for now*/
 	private String address;
 
 	private String city;
@@ -67,13 +70,16 @@ public class User extends RepresentationModel<User> implements Serializable {
 	//@JsonIgnore
 	private String password;
 
-	@NotBlank
-	@NotEmpty
+	/*
+	 * @NotBlank
+	 * 
+	 * @NotEmpty not using this constraint for now
+	 */
 	private String phonenumber;
 
 	private String bankaccountnumber;
 
-	@Past
+	/* @Past  not using this constraint for now*/
 	@Temporal(TemporalType.DATE)
 	private Date birthdate;
 
@@ -93,6 +99,14 @@ public class User extends RepresentationModel<User> implements Serializable {
 	private String ssnitid;
 
 	private String votersid;
+	
+	private String tier2;
+	
+	private String tinnumber;
+	
+	private String marriagecertid;
+	
+	private String usercreator;
 
 	// bi-directional many-to-one association to Userdepartment
 	@JsonIgnore
@@ -426,6 +440,62 @@ public class User extends RepresentationModel<User> implements Serializable {
 		this.votersid = votersid;
 	}
 	
+	/**
+	 * @return the tier2
+	 */
+	public String getTier2() {
+		return tier2;
+	}
+
+	/**
+	 * @param tier2 the tier2 to set
+	 */
+	public void setTier2(String tier2) {
+		this.tier2 = tier2;
+	}
+
+	/**
+	 * @return the tinnumber
+	 */
+	public String getTinnumber() {
+		return tinnumber;
+	}
+
+	/**
+	 * @param tinnumber the tinnumber to set
+	 */
+	public void setTinnumber(String tinnumber) {
+		this.tinnumber = tinnumber;
+	}
+
+	/**
+	 * @return the marriagecertid
+	 */
+	public String getMarriagecertid() {
+		return marriagecertid;
+	}
+
+	/**
+	 * @param marriagecertid the marriagecertid to set
+	 */
+	public void setMarriagecertid(String marriagecertid) {
+		this.marriagecertid = marriagecertid;
+	}
+
+	/**
+	 * @return the usercreator
+	 */
+	public String getUsercreator() {
+		return usercreator;
+	}
+
+	/**
+	 * @param usercreator the usercreator to set
+	 */
+	public void setUsercreator(String usercreator) {
+		this.usercreator = usercreator;
+	}
+
 	public Userdepartment addUserdepartment(Userdepartment userdepartment) {
 		getUserdepartments().add(userdepartment);
 		userdepartment.setUser(this);

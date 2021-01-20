@@ -70,6 +70,15 @@ public class AdminServiceImpl implements AdminService {
 		usertoAdd.setPassportid(user.getPassportid());
 		usertoAdd.setSsnitid(user.getSsnitid());
 		usertoAdd.setVotersid(user.getVotersid());
+		usertoAdd.setTier2(user.getTier2());
+		usertoAdd.setTinnumber(user.getTinnumber());
+		usertoAdd.setMarriagecertid(user.getMarriagecertid());
+		
+		if(user.getUsercreator().isEmpty()) {
+			usertoAdd.setUsercreator("By SystemUser");
+		}else {
+			usertoAdd.setUsercreator(user.getUsercreator());
+		}
 		
 		return userRepository.save(usertoAdd);
 	}
@@ -111,7 +120,11 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public User findUserByEmail(String email) {
-		return userRepository.getUserByEmail(email);
+		 User user = userRepository.getUserByEmail(email);
+		 if(user == null) {
+			 throw new ResourceNotFoundException("User with email = " + email + " not registered");
+		 }
+		 return user;
 	}
 
 	@Override

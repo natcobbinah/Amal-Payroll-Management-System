@@ -18,9 +18,9 @@ use payrollusermanagement;
 ########################################
 create table users(
 	id int primary key auto_increment,
-    name varchar(100),
+    username varchar(100),
     email varchar(100) unique,
-    password varbinary(20),
+    password varbinary(100),
     enabled boolean,
     address varchar(100),
     city varchar(100),
@@ -36,10 +36,12 @@ create table users(
     driverslicenseid varchar(50) unique,
     votersid varchar(50) unique,
     passportid varchar(50) unique,
-    ssnitid varchar(50) unique
+    ssnitid varchar(50) unique,
+    tier2 varchar(50) unique,
+    tinnumber varchar(50) unique,
+    marriagecertid varchar(50) unique,
+    usercreator varchar(50)
 )engine =InnoDb;
-
-
 
 ########################################
 #create table roles
