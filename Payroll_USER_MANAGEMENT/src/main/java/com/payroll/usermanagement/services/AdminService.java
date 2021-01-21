@@ -48,7 +48,9 @@ public interface AdminService {
 	
 	Optional<Role> findRoleById(int roleid);
 	
-	String deleteRole(int roleid);
+	boolean deleteRole(String roleid);
+	
+	boolean updateRole(Role role);
 	
 	Department addDepartment(Department department);
 	
@@ -56,6 +58,9 @@ public interface AdminService {
 	
 	Optional<Department> findDepartmentbyId(int deptid);
 	
-	String deleteDepartment(int departmenid);
+	boolean deleteDepartment(String departmenid);
+	
+	boolean updateDepartment(Department department);
+	
 	
 }

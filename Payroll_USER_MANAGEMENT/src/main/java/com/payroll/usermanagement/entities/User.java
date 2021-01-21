@@ -100,8 +100,6 @@ public class User extends RepresentationModel<User> implements Serializable {
 
 	private String votersid;
 	
-	private String tier2;
-	
 	private String tinnumber;
 	
 	private String marriagecertid;
@@ -438,20 +436,6 @@ public class User extends RepresentationModel<User> implements Serializable {
 	 */
 	public void setVotersid(String votersid) {
 		this.votersid = votersid;
-	}
-	
-	/**
-	 * @return the tier2
-	 */
-	public String getTier2() {
-		return tier2;
-	}
-
-	/**
-	 * @param tier2 the tier2 to set
-	 */
-	public void setTier2(String tier2) {
-		this.tier2 = tier2;
 	}
 
 	/**

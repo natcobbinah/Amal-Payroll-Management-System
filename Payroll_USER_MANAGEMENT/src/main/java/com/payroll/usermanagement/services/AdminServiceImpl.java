@@ -1,6 +1,5 @@
 package com.payroll.usermanagement.services;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,7 +69,6 @@ public class AdminServiceImpl implements AdminService {
 		usertoAdd.setPassportid(user.getPassportid());
 		usertoAdd.setSsnitid(user.getSsnitid());
 		usertoAdd.setVotersid(user.getVotersid());
-		usertoAdd.setTier2(user.getTier2());
 		usertoAdd.setTinnumber(user.getTinnumber());
 		usertoAdd.setMarriagecertid(user.getMarriagecertid());
 		
@@ -165,9 +163,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public String deleteRole(int roleid) {
-		roleRepository.deleteById(roleid);
-		return "Role deleted successfully";
+	public boolean deleteRole(String roleid) {
+		roleRepository.deleteById(Integer.parseInt(roleid));
+		return true;
 	}
 
 	@Override
@@ -188,9 +186,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public String deleteDepartment(int departmentid) {
-		departmentRepository.deleteById(departmentid);
-		return "Department deleted successfully";
+	public boolean deleteDepartment(String departmentid) {
+		departmentRepository.deleteById(Integer.parseInt(departmentid));
+		return true;
 	}
 
 	@Override
@@ -226,6 +224,18 @@ public class AdminServiceImpl implements AdminService {
 	public Iterable<Userrole> getAllUserRoles(Pageable pageable) {
 		 Page<Userrole> alluserroles = userroleRepository.findAll(pageable);
 		 return alluserroles;
+	}
+
+	@Override
+	public boolean updateRole(Role role) {
+		roleRepository.save(role);
+		return true;
+	}
+
+	@Override
+	public boolean updateDepartment(Department department) {
+		departmentRepository.save(department);
+		return true;
 	}
 
 }

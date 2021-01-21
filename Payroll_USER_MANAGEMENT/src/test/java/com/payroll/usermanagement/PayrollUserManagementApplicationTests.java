@@ -1,21 +1,12 @@
 package com.payroll.usermanagement;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.authority.AuthorityUtils;
 
-import com.payroll.usermanagement.entities.Department;
-import com.payroll.usermanagement.entities.Role;
-import com.payroll.usermanagement.entities.User;
-import com.payroll.usermanagement.entities.Userdepartment;
-import com.payroll.usermanagement.entities.Userrole;
-import com.payroll.usermanagement.passwordEncoder.PasswordEncoder;
+import com.payroll.usermanagement.EmailServices.EmailService;
+import com.payroll.usermanagement.EmailServices.GMailMailService;
+import com.payroll.usermanagement.EmailServices.Mail;
 import com.payroll.usermanagement.repositories.DepartmentRepository;
 import com.payroll.usermanagement.repositories.RoleRepository;
 import com.payroll.usermanagement.repositories.UserDepartmentRepository;
@@ -39,7 +30,28 @@ class PayrollUserManagementApplicationTests {
 
 	@Autowired
 	UserroleRepository userroleRepository;
+	
+	@Autowired
+	EmailService emailService;
 
+	@Autowired
+	GMailMailService gMailMailService;
+	
+	@Test
+	public void testgmailEmail() {//works
+		Mail mail = new Mail();
+        mail.setMailFrom("fmg3ckali@gmail.com");
+        mail.setMailTo("nathaniel.cobbinah@amalitech.org");
+        mail.setMailSubject("Send Login Credentials");
+        mail.setMailContent("Testing sendLogin Credentials from payroll system ");
+        
+        gMailMailService.sendEmail(mail);
+	}
+	/*
+	 * @Test public void testEmail() {works/ emailService.sendMail("fmg3ckali@gmail.com",
+	 * "baby.hugo74@yahoo.com", "Testing MailTrap emailService ",
+	 * "Service Looks great"); }
+	 *works/
 	/*
 	 * @Test public void getUsersByUserrole() {// works List<Userrole> userrole =
 	 * userroleRepository.getUsersByRole(48); for (Userrole u : userrole) {

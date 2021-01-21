@@ -4,10 +4,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.net.URI;
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -16,7 +14,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -31,10 +28,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.payroll.usermanagement.EmailServices.EmailService;
 import com.payroll.usermanagement.entities.Department;
 import com.payroll.usermanagement.entities.Role;
 import com.payroll.usermanagement.entities.User;
@@ -43,7 +39,6 @@ import com.payroll.usermanagement.entities.Userrole;
 import com.payroll.usermanagement.exceptionhandling.ErrorDetail;
 import com.payroll.usermanagement.exceptionhandling.ResourceNotFoundException;
 import com.payroll.usermanagement.services.AdminService;
-import com.payroll.usermanagement.services.UserCredentialsandRolesService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
@@ -65,6 +60,8 @@ public class PayrollUserManagementApplication {
 	@Autowired
 	AdminService adminService;
 
+	@Autowired
+	EmailService emailService;
 	/*
 	 * @Autowired UserCredentialsandRolesService userCredentialsandRoleService;
 	 */
@@ -128,6 +125,63 @@ public class PayrollUserManagementApplication {
 	public User findUserByEmailTest(@PathVariable("email") String email) {
 		return adminService.findUserByEmail(email);
 	}
+	
+	@GetMapping("/test/departments")
+	public Iterable<Department> getAllDepartmentsTest(Pageable pageable) {
+		return adminService.getAllDepartments(pageable);
+	}
+	
+	@PatchMapping("/test/departments")//need to add this to main restendpoints
+	public boolean updateDepartmentTest(@RequestBody Department department) {
+		 return adminService.updateDepartment(department);
+	}
+
+	@PostMapping("/test/departments")
+	public Department addDepartmentTest(@RequestBody Department department) {
+		Department addedDepartment = adminService.addDepartment(department);
+		return addedDepartment;
+	}
+	
+	@GetMapping("/test/deletedepartment/{departmentid}")
+	public boolean deleteDepartmentTest(@PathVariable("departmentid") String departmentid) {
+		 adminService.deleteDepartment(departmentid);
+		 return true;
+	}
+	
+	@GetMapping("/test/role")
+	public Iterable<Role> getAllRolesTest(Pageable pageable) {
+		return adminService.getAllRoles(pageable);
+	}
+	
+	@PostMapping("/test/role")
+	public Role addRoleTest(@RequestBody Role role) {
+		Role addedRole = adminService.addRole(role);
+		return addedRole;
+	}
+	
+	@PatchMapping("/test/role")//need to add this to main restendpoints
+	public boolean updateRoleTest(@RequestBody Role role) {
+		return adminService.updateRole(role);
+	}
+	
+	@GetMapping("/test/deleterole/{roleid}")
+	public boolean deleteRoleTest(@PathVariable("roleid") String roleid) {
+		 adminService.deleteRole(roleid);
+		 return true;
+	}
+	
+	@GetMapping("/test/userdepartment/{userid}")
+	public List<Userdepartment> getUserbyDepartmentTest(@PathVariable("userid") int userid) {
+		return adminService.getUserbyDepartment(userid);
+	}
+	
+	@GetMapping("/test/sendemail/{to}/{subject}/{message}")
+	public boolean sendMail(@PathVariable("to") String to,@PathVariable("subject") String subject,
+			@PathVariable("message") String message) {
+		emailService.sendMail(to, subject, message);
+		return true;
+	}
+
 	
 	//END OF URL FOR TESTING PURPOSES===========================================
 
@@ -226,7 +280,7 @@ public class PayrollUserManagementApplication {
 	@ApiOperation(value = "Deletes Role by roleID", notes = "Deletes a role from the system", response = Role.class)
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Role deleted successfully", response = Role.class),
 			@ApiResponse(code = 500, message = "Error deleting role", response = ErrorDetail.class) })
-	public String deleteRole(@PathVariable("roleid") int roleid) {
+	public boolean deleteRole(@PathVariable("roleid") String roleid) {
 		return adminService.deleteRole(roleid);
 	}
 
@@ -236,8 +290,9 @@ public class PayrollUserManagementApplication {
 	@ApiResponses(value = {
 			@ApiResponse(code = 201, message = "department deleted successfully", response = Department.class),
 			@ApiResponse(code = 500, message = "Error deleting department", response = ErrorDetail.class) })
-	public String deleteDepartment(@PathVariable("departmentid") int departmentid) {
-		return adminService.deleteDepartment(departmentid);
+	public boolean deleteDepartment(@PathVariable("departmentid") String departmentid) {
+		 adminService.deleteDepartment(departmentid);
+		 return true;
 	}
 
 	@PreAuthorize("hasAuthority('ADMIN')")
